@@ -38,8 +38,8 @@ object MonteCarloIntegral {
       else {
         val x = randX.nextDouble * range + leftLimit
         val y = function(x)
-//        println(s"Generated value $x")
-//        println(s"Function calculated $y")
+        println(s"Generated value $x")
+        println(s"Function calculated $y")
 
         simulate(sum + y, pointsGenerated + 1)
       }

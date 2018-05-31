@@ -88,20 +88,20 @@ object Runner {
         else
           (x._1, x._2, y._1)
       else if (x._3 == " ")
-        (x._1, x._2, y._1)
+          (x._1, x._2, y._1)
       else
         if (x._3 == "")
           (x._1 + y._1, x._2 + y._2, x._3 + y._3)
+        else if (y._3 != "")
+          (x._1, x._2 + y._2 + 1, y._3)
         else (x._1, x._2 + y._2, x._3 + y._1)
-
-
-
     }
 
     override def zero: (String, Int, String) = ("", 0, "")
   }
 
   def calculateLineRes(): (String, Int, String) = {
+    implicit val thresholdSize: Int = 10
     def f = (x: Char) => (x.toString, 0, "")
     var index: Int = 0
     var res = ("", 0, "")
@@ -110,18 +110,17 @@ object Runner {
 
     for (line <- bufferedSource.getLines) {
       if (index == 0)
-        res = foldMapSegment(line, 0, line.length, monoid)(f)
+        res = foldMapPar(line, 0, line.length, monoid)(f)
       else
-        res = monoid.op(res, foldMapSegment(line, 0, line.length, monoid)(f))
+        res = monoid.op(res, foldMapPar(line, 0, line.length, monoid)(f))
 
       index = index + 1
     }
-
     res
   }
 
   def main(args: Array[String]): Unit = {
-    implicit val thresholdSize: Int = 10
+
     val res = calculateLineRes()
     println(res)
   }
